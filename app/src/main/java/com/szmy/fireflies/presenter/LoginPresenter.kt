@@ -66,17 +66,25 @@ class LoginPresenter(val view: LoginContract.View) : LoginContract.Presenter {
                 val jsonObject = JSONObject(json)
                 val msg = jsonObject["msg"] as String
                 //getStatusCode
-                val code = response.code()
+                val statusCode = response.code()
 
                 //Log.d(TAG,"$code")
                 uiThread {
-                    if (code!=200){
+                    if (statusCode!=200){
                         view.onLoginFailed(msg)
                     }else{
-                        val token = jsonObject["token"] as String
-                        //登录成功后才会拿到token，之后的请求都要使用到token，因此保存到本地文件
-                        Prefs.setUserToken(token)
-                        view.onLoginSuccess()
+                        val code = jsonObject["code"] as Int
+
+                        if (code==500){
+                            view.onLoginFailed("密码错误")
+                        }else{
+                            val token = jsonObject["token"] as String
+                            //登录成功后才会拿到token，之后的请求都要使用到token，因此保存到本地文件
+                            Prefs.setUserToken(token)
+                            view.onLoginSuccess()
+                        }
+
+
                     }
                 }
 

@@ -20,5 +20,14 @@ object Prefs {
         return prefs.getString("token",null)
     }
 
+    fun setLoginState(isLogin:Boolean){
+        prefs.edit()
+            .putBoolean("isLogin",isLogin)
+            .apply()
+    }
+
+    fun getLoginState():Boolean{
+        return prefs.getBoolean("isLogin",false)
+    }
 
 }

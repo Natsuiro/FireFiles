@@ -41,7 +41,10 @@ abstract class BaseActivity : AppCompatActivity() {
         progressDialog.show()
     }
     fun dismissProgress(){
-        progressDialog.dismiss()
+        if (progressDialog.isShowing){
+            progressDialog.dismiss()
+        }
+
     }
 
 

@@ -7,4 +7,11 @@
     <string name="logging">正在登录</string>
     <string name="login_success">登录成功</string>
     <string name="login_failed">登录失败</string>
+    <string name="prompt_confirm_password">确认密码</string>
+    <string name="action_register">注册</string>
+    <string name="on_register">正在注册</string>
+    <string name="register_success">注册成功</string>
+    <string name="permission_denied">权限已拒绝</string>
+    <string name="on_check">正在检验</string>
+    <string name="register_failed">注册失败</string>
 </resources>
