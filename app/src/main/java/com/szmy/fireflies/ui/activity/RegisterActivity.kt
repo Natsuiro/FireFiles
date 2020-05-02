@@ -1,11 +1,9 @@
-package com.szmy.fireflies.ui
+package com.szmy.fireflies.ui.activity
 
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
-import android.icu.text.SimpleDateFormat
-import android.os.Build
 import android.util.Log
 import android.widget.ImageView
 import com.szmy.fireflies.R
@@ -15,7 +13,6 @@ import kotlinx.android.synthetic.main.activity_register.*
 import org.jetbrains.anko.toast
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
-import java.text.DateFormat
 import java.util.*
 
 class RegisterActivity : BaseActivity(), RegisterContract.View {

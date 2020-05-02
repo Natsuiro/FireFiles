@@ -1,21 +1,16 @@
 package com.szmy.fireflies.presenter
 
 import android.util.Log
-import com.alibaba.sdk.android.oss.ClientException
 import com.alibaba.sdk.android.oss.OSSClient
-import com.alibaba.sdk.android.oss.ServiceException
-import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback
-import com.alibaba.sdk.android.oss.callback.OSSProgressCallback
 import com.alibaba.sdk.android.oss.common.auth.OSSAuthCredentialsProvider
 import com.alibaba.sdk.android.oss.model.PutObjectRequest
-import com.alibaba.sdk.android.oss.model.PutObjectResult
 import com.szmy.fireflies.R
 import com.szmy.fireflies.constant.GlobalUtils
 import com.szmy.fireflies.constant.WebConstant
 import com.szmy.fireflies.contract.RegisterContract
 import com.szmy.fireflies.extensions.toMD5
 import com.szmy.fireflies.model.HttpUtils
-import com.szmy.fireflies.ui.RegisterActivity
+import com.szmy.fireflies.ui.activity.RegisterActivity
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -61,9 +56,9 @@ class RegisterPresenter(private val view: RegisterContract.View) : RegisterContr
     }
 
     override fun checkIdExist(userId: String) {
-        val hashMap = HashMap<String, String>()
-        hashMap["name"] = userId
-        HttpUtils.get(WebConstant.CheckIdUrl, hashMap, object : Callback {
+        val url = "${WebConstant.CheckIdUrl}?name=$userId"
+
+        HttpUtils.get(url, object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 //这个错误是由于网络或者服务器错误产生的
                 uiThread { view.onRegisterFailed("网络异常") }

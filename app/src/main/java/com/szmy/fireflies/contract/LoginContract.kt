@@ -1,5 +1,6 @@
 package com.szmy.fireflies.contract
 
+import com.szmy.fireflies.beans.User
 import com.szmy.fireflies.presenter.BasePresenter
 
 interface LoginContract {

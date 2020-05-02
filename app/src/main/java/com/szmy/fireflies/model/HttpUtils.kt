@@ -1,5 +1,6 @@
 package com.szmy.fireflies.model
 
+import android.text.TextUtils
 import android.util.Log
 import okhttp3.*
 
@@ -21,33 +22,33 @@ object HttpUtils {
                 Log.d("post", "$key=$value")
             }
         }
+
         val build = builder.build()
+        val userToken = Prefs.getUserToken()
 
-        val request: Request = Request
-            .Builder()
-            .post(build)
-            .url(url)
-            .build()
-
-        client.newCall(request).enqueue(callback)
+        Log.d("token",""+userToken)
+        if (userToken!=null){
+            val request: Request = Request
+                .Builder()
+                .header("token",userToken)
+                .post(build)
+                .url(url)
+                .build()
+            client.newCall(request).enqueue(callback)
+        }
     }
 
-    fun get(url: String,params: HashMap<String, String>,callback: Callback){
-        val client = OkHttpClient()
-
-        val builder = HttpUrl.parse(url)?.newBuilder()
-        val keySet = params.keys
-        for (key in keySet){
-            val value = params[key]
-            if (value!=null){
-                builder?.addQueryParameter(key,value)
-            }
+    fun get(url: String, callback: Callback){
+        val userToken = Prefs.getUserToken()
+        if (userToken!=null){
+            val client = OkHttpClient()
+            val request: Request = Request
+                .Builder()
+                .header("token",userToken)
+                .url(url)
+                .build()
+            client.newCall(request).enqueue(callback)
         }
-        val request: Request = Request
-            .Builder()
-            .url(builder!!.build())
-            .build()
-        client.newCall(request).enqueue(callback)
     }
 
 }

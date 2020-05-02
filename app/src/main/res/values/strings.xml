@@ -14,4 +14,15 @@
     <string name="permission_denied">权限已拒绝</string>
     <string name="on_check">正在检验</string>
     <string name="register_failed">注册失败</string>
+    <string name="bottom_bar_home">首页</string>
+    <string name="bottom_bar_found">发现</string>
+    <string name="bottom_bar_message">消息</string>
+    <string name="bottom_bar_me">我</string>
+    <string name="user_msg">微博</string>
+    <string name="user_follow">关注</string>
+    <string name="user_fans">粉丝</string>
+    <string name="load_fail">加载失败</string>
+    <string name="default_count">0</string>
+    <string name="btn_logout">退出登录</string>
+    <string name="search_user">发现用户</string>
 </resources>

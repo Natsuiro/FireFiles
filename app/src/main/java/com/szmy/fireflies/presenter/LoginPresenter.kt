@@ -1,12 +1,13 @@
 package com.szmy.fireflies.presenter
 
 import android.util.Log
+import com.szmy.fireflies.beans.User
 import com.szmy.fireflies.contract.LoginContract
 import com.szmy.fireflies.extensions.toMD5
 import com.szmy.fireflies.constant.WebConstant
 import com.szmy.fireflies.model.HttpUtils
 import com.szmy.fireflies.model.Prefs
-import com.szmy.fireflies.ui.LoginActivity
+import com.szmy.fireflies.ui.activity.LoginActivity
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
@@ -47,6 +48,7 @@ class LoginPresenter(val view: LoginContract.View) : LoginContract.Presenter {
         //对密码进行MDD5加密
         paramsMap["password"] = password.toMD5()
 
+
         Log.d(TAG,password.toMD5())
         //到model层去请求网络，通过回调监听请求结果
         HttpUtils.post(WebConstant.LoginUrl,paramsMap,object :Callback{
@@ -81,10 +83,11 @@ class LoginPresenter(val view: LoginContract.View) : LoginContract.Presenter {
                             val token = jsonObject["token"] as String
                             //登录成功后才会拿到token，之后的请求都要使用到token，因此保存到本地文件
                             Prefs.setUserToken(token)
+                            Prefs.setLoginState(true)
+                            Prefs.saveUserId(2)
+
                             view.onLoginSuccess()
                         }
-
-
                     }
                 }
 

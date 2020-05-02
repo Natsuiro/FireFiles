@@ -1,9 +1,9 @@
-package com.szmy.fireflies.ui
+package com.szmy.fireflies.ui.activity
 
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
 import com.szmy.fireflies.R
+import com.szmy.fireflies.app.FFApplication
+import com.szmy.fireflies.beans.User
+import com.szmy.fireflies.constant.GlobalUtils
 import com.szmy.fireflies.contract.LoginContract
 import com.szmy.fireflies.model.Prefs
 import com.szmy.fireflies.presenter.LoginPresenter
@@ -16,6 +16,9 @@ class LoginActivity : BaseActivity(), LoginContract.View {
     companion object{
         const val INPUT_ID_ERROR = 0
         const val INPUT_PASSWORD_ERROR = 1
+        fun start(){
+            GlobalUtils.getContext().startActivity<LoginActivity>()
+        }
     }
 
 
@@ -25,38 +28,8 @@ class LoginActivity : BaseActivity(), LoginContract.View {
 
     override fun init() {
         super.init()
-        if(hasWriteExternalStoragePermission()){
-            initLogin()
-            initRegister()
-        }else{
-            applyWriteExternalStoragePermission()
-        }
-
-    }
-
-    private fun hasWriteExternalStoragePermission(): Boolean {
-
-        val checkSelfPermission =
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        return checkSelfPermission == PackageManager.PERMISSION_GRANTED
-    }
-    private fun applyWriteExternalStoragePermission() {
-        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        ActivityCompat.requestPermissions(this,permissions,0)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            //用户同意权限
-            //login()
-            initLogin()
-            initRegister()
-        }else{
-            toast(R.string.permission_denied)
-        }
+        initLogin()
+        initRegister()
     }
 
     private fun initRegister() {
@@ -107,7 +80,6 @@ class LoginActivity : BaseActivity(), LoginContract.View {
         startActivity<MainActivity>()
         finish()
     }
-
 
     override fun onLoginFailed(msg: String) {
         dismissProgress()

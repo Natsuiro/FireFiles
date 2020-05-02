@@ -1,10 +1,8 @@
-package com.szmy.fireflies.ui
+package com.szmy.fireflies.ui.activity
 
-import android.app.ActivityManager
 import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
