@@ -2,13 +2,12 @@ package com.szmy.fireflies.model
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.szmy.fireflies.beans.User
-import com.szmy.fireflies.constant.GlobalUtils
+import com.szmy.fireflies.constant.Utils
 
 object Prefs {
 
     private val prefs: SharedPreferences by lazy {
-        GlobalUtils.getContext().getSharedPreferences("config", Context.MODE_PRIVATE)
+        Utils.getContext().getSharedPreferences("config", Context.MODE_PRIVATE)
     }
 
     fun saveUserId(userId:Int) {

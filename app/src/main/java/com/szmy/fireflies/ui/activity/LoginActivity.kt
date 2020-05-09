@@ -1,11 +1,9 @@
 package com.szmy.fireflies.ui.activity
 
+import android.view.View
+import android.widget.AdapterView
 import com.szmy.fireflies.R
-import com.szmy.fireflies.app.FFApplication
-import com.szmy.fireflies.beans.User
-import com.szmy.fireflies.constant.GlobalUtils
 import com.szmy.fireflies.contract.LoginContract
-import com.szmy.fireflies.model.Prefs
 import com.szmy.fireflies.presenter.LoginPresenter
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.startActivity
@@ -14,22 +12,38 @@ import org.jetbrains.anko.toast
 class LoginActivity : BaseActivity(), LoginContract.View {
 
     companion object{
-        const val INPUT_ID_ERROR = 0
-        const val INPUT_PASSWORD_ERROR = 1
-        fun start(){
-            GlobalUtils.getContext().startActivity<LoginActivity>()
-        }
+        //登录方式
+        const val LOGIN_TYPE_USERNAME = 0
+        const val LOGIN_TYPE_EMAIL = 1
+        const val LOGIN_TYPE_PHONE = 2
     }
 
-
     private val presenter = LoginPresenter(this)
-
+    //加载布局资源
     override fun getLayoutId(): Int = R.layout.activity_login
-
+    //活动的初始化
     override fun init() {
         super.init()
         initLogin()
         initRegister()
+        initSpinner()
+    }
+
+    private fun initSpinner() {
+        loginType.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val content = parent.getItemAtPosition(position).toString()
+                loginAccount.hint = content
+            }
+
+        }
     }
 
     private fun initRegister() {
@@ -49,40 +63,49 @@ class LoginActivity : BaseActivity(), LoginContract.View {
     }
 
     private fun toLogin() {
-
         //隐藏软键盘
         hideSoftKeyBoard()
         //拿到用户的输入
-        val loginId = username.text.trim().toString()
-        val password = password.text.trim().toString()
+        presenter.login(getAccountInput(),getPassword(),getLoginType())
+    }
 
-        presenter.login(loginId,password,getLoginType())
+    private fun getPassword() :String{
+        return this.password.text.trim().toString()
+    }
 
-
+    private fun getAccountInput():String {
+        return this.loginAccount.text.trim().toString()
     }
 
     private fun getLoginType(): Int {
         //根据具体逻辑判断登录的方式
-        return LoginPresenter.LOGIN_TYPE_USERNAME
+        return when (loginType.selectedItemPosition) {
+            0 -> LOGIN_TYPE_USERNAME
+            1 -> LOGIN_TYPE_PHONE
+            2 -> LOGIN_TYPE_EMAIL
+            else -> -1
+        }
     }
 
     override fun onLoginStart() {
-        //弹出ProgressBar
-        showProgressDialog(getString(R.string.logging))
+        login.visibility = View.GONE
+        login_progress.visibility = View.VISIBLE
     }
-    override fun onInputError(errorCode: Int) {
-        toast("errorCode: $errorCode")
+
+    override fun onInputError() {
+        toast("密码或者账号输入不合法")
     }
 
     override fun onLoginSuccess() {
-        dismissProgress()
-        toast(getString(R.string.login_success))
+        login.visibility = View.VISIBLE
+        login_progress.visibility = View.GONE
         startActivity<MainActivity>()
         finish()
     }
 
     override fun onLoginFailed(msg: String) {
-        dismissProgress()
+        login.visibility = View.VISIBLE
+        login_progress.visibility = View.GONE
         toast(msg)
     }
 

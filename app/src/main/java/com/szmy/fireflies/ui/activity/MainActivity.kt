@@ -31,15 +31,6 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setCurrentFragment(fragmentId:Int){
-        if (fragmentId == R.id.message || fragmentId == R.id.me){
-            if (!Prefs.getLoginState()){
-                toast("请先登录")
-                startActivity<LoginActivity>()
-                finish()
-                return
-            }
-        }
-
         val fragment = FragmentFactory.instance.getFragment(fragmentId)
         if (fragment!=null){
             val beginTransaction = supportFragmentManager.beginTransaction()

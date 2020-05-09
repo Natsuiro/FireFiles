@@ -6,24 +6,23 @@ interface RegisterContract {
 
     interface Presenter : BasePresenter{
         fun register(
-            registerId: String,
+            account: String,
             password: String,
             confirmPassword: String,
             timestamp: String,
-            registerType: Int,
             bytes: ByteArray
         )
-        fun checkIdExist(userId:String)
+        fun checkIdExist(registerAccount:String)
     }
 
     interface View {
         fun onCheckUserStart()
         fun onRegisterStart()
-        fun onInputError(errorCode:Int)
+        fun onInputError()
         fun onRegisterSuccess()
         fun onRegisterFailed(msg:String)
-        fun onUserExist()
-        fun onUserNotExist()
+        fun onAccountExist()
+        fun onAccountNotExist()
     }
 
 }

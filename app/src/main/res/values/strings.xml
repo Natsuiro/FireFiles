@@ -25,4 +25,7 @@
     <string name="default_count">0</string>
     <string name="btn_logout">退出登录</string>
     <string name="search_user">发现用户</string>
+    <string name="login_type">登录方式</string>
+    <string name="choose_icon">选择头像</string>
+    <string name="register_type">注册方式</string>
 </resources>

@@ -12,9 +12,7 @@ abstract class BaseActivity : AppCompatActivity() {
     companion object{
         const val TAG = "BaseActivity"
     }
-    private val progressDialog by lazy {
-        ProgressDialog(this)
-    }
+
     private val inputMethodManager by lazy {
         getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
@@ -31,23 +29,10 @@ abstract class BaseActivity : AppCompatActivity() {
      * 可以被子类覆盖用于实际的init操作
      */
     open fun init() {
-        Log.d(TAG,"Activity init")
+        Log.d(TAG,this.toString())
     }
-
-    fun showProgressDialog(msg:String){
-        progressDialog.setMessage(msg)
-        progressDialog.show()
-    }
-    fun dismissProgress(){
-        if (progressDialog.isShowing){
-            progressDialog.dismiss()
-        }
-
-    }
-
 
     abstract fun getLayoutId(): Int
-
 
     fun hideSoftKeyBoard(){
         inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken,0)

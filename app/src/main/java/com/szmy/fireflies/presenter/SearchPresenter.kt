@@ -2,7 +2,7 @@ package com.szmy.fireflies.presenter
 
 import android.text.TextUtils
 import android.util.Log
-import com.szmy.fireflies.constant.WebConstant
+import com.szmy.fireflies.constant.UserApi
 import com.szmy.fireflies.contract.SearchViewContract
 import com.szmy.fireflies.model.HttpUtils
 import okhttp3.Call
@@ -13,7 +13,7 @@ import java.io.IOException
 
 class SearchPresenter(val view:SearchViewContract.View) :SearchViewContract.Presenter{
     override fun search(userId: String,vararg params:String) {
-        val url = WebConstant.FullInfoUrl+userId
+        val url = UserApi.FullInfoUrl+userId
         HttpUtils.get(url,object :Callback{
             override fun onFailure(call: Call, e: IOException) {
                 uiThread {
@@ -46,7 +46,7 @@ class SearchPresenter(val view:SearchViewContract.View) :SearchViewContract.Pres
         val hashMap = HashMap<String, String>()
         hashMap["followedId"] = userId.toString()
         hashMap["time"] = time
-        HttpUtils.post(WebConstant.FollowUrl,hashMap,object :Callback{
+        HttpUtils.post(UserApi.FollowUrl,hashMap,object :Callback{
             override fun onFailure(call: Call, e: IOException) {
                 uiThread {
                     view.onFollowFailed()

@@ -3,7 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="btn_login_unpressed">#56ECE0</color>
+    <color name="btn_login_unpressed">#64D2ED</color>
     <color name="btn_login_pressed">#12A5B1</color>
     <color name="btn_login_default">#56ECE0</color>
     <color name="im_blue">#4194F8</color>

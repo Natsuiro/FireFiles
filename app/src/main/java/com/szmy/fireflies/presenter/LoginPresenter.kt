@@ -1,109 +1,123 @@
 package com.szmy.fireflies.presenter
 
 import android.util.Log
-import com.szmy.fireflies.beans.User
+import com.szmy.fireflies.beans.LoginBean
 import com.szmy.fireflies.contract.LoginContract
 import com.szmy.fireflies.extensions.toMD5
-import com.szmy.fireflies.constant.WebConstant
-import com.szmy.fireflies.model.HttpUtils
+import com.szmy.fireflies.constant.UserApi
 import com.szmy.fireflies.model.Prefs
+import com.szmy.fireflies.serverapi.LoginService
 import com.szmy.fireflies.ui.activity.LoginActivity
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Response
-import org.json.JSONObject
-import java.io.IOException
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.Executors
 
 class LoginPresenter(val view: LoginContract.View) : LoginContract.Presenter {
 
-    val TAG = "LoginPresenter"
-    companion object {
-        const val LOGIN_TYPE_USERNAME = 0
-        const val LOGIN_TYPE_EMAIL = 1
-        const val LOGIN_TYPE_PHONE = 2
-    }
-
-    override fun login(loginId: String, password: String, loginType: Int) {
-
-        if (checkLoginId(loginId,loginType)){
+    private val retrofit:Retrofit = Retrofit.Builder()
+        .baseUrl(UserApi.BaseUrl)
+        .addConverterFactory(GsonConverterFactory.create())
+        .callbackExecutor(Executors.newSingleThreadExecutor())
+        .build()
+    override fun login(loginAccount: String, password: String, loginType: Int) {
+        if (checkAccount(loginAccount,loginType)){
             if (checkPassword(password)){
                 //通知view开始登录操作了
-                view.onLoginStart()
-                toLogin(loginId,password)
+
+                uiThread {
+                    view.onLoginStart()
+                }
+
+                toLogin(loginAccount,password,loginType)
             }else{
                 //密码输入不合法
-                view.onInputError(LoginActivity.INPUT_PASSWORD_ERROR)
-            }
-        }else{
-            //用户名输入不合法
-            view.onInputError(LoginActivity.INPUT_ID_ERROR)
-        }
-
-    }
-
-    private fun toLogin(loginId: String, password: String) {
-        //存放post请求时需要使用到的参数，以键值对的形式存放
-        val paramsMap = HashMap<String,String>()
-        paramsMap["name"] = loginId
-        //对密码进行MDD5加密
-        paramsMap["password"] = password.toMD5()
-
-
-        Log.d(TAG,password.toMD5())
-        //到model层去请求网络，通过回调监听请求结果
-        HttpUtils.post(WebConstant.LoginUrl,paramsMap,object :Callback{
-            override fun onFailure(call: Call, e: IOException) {
-                //这个错误是由于网络或者服务器错误产生的
-                uiThread { view.onLoginFailed("网络异常") }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                /**
-                 * json：
-                 *  msg
-                 *  token
-                 *  code
-                 */
-                val json = response.body()!!.string()
-                val jsonObject = JSONObject(json)
-                val msg = jsonObject["msg"] as String
-                //getStatusCode
-                val statusCode = response.code()
-
-                //Log.d(TAG,"$code")
                 uiThread {
-                    if (statusCode!=200){
-                        view.onLoginFailed(msg)
-                    }else{
-                        val code = jsonObject["code"] as Int
-
-                        if (code==500){
-                            view.onLoginFailed("密码错误")
-                        }else{
-                            val token = jsonObject["token"] as String
-                            //登录成功后才会拿到token，之后的请求都要使用到token，因此保存到本地文件
-                            Prefs.setUserToken(token)
-                            Prefs.setLoginState(true)
-                            Prefs.saveUserId(2)
-
-                            view.onLoginSuccess()
-                        }
-                    }
+                    view.onInputError()
                 }
 
             }
+        }else{
+            //手机号输入不合法
+            uiThread {
+                view.onInputError()
+            }
+        }
+    }
+    private fun toLogin(loginAccount: String, password: String,loginType: Int) {
 
+        Log.d("Login",loginAccount)
+        Log.d("Login",password.toMD5())
+
+        //动态代理
+        val loginService = retrofit.create(LoginService::class.java)
+        val loginCall = getLoginCall(loginAccount,password,loginService,loginType)
+        loginCall?.enqueue(object :Callback<LoginBean>{
+            override fun onFailure(call: Call<LoginBean>, t: Throwable) {
+                uiThread {
+                    view.onLoginFailed("网络异常:"+t.message)
+                }
+            }
+            override fun onResponse(call: Call<LoginBean>, response: Response<LoginBean>) {
+                val status = response.code()
+                val message = response.message()
+                if (status==200){
+                        val loginBean = response.body() as LoginBean
+                        val code = loginBean.code
+                        val msg = loginBean.msg
+                        //登录成功
+                        if (code == 0){
+                            //保存登录成功的信息
+                            val token = loginBean.token
+                            val id = loginBean.user.userId
+                            Prefs.setUserToken(token)
+                            Prefs.saveUserId(id)
+                            Prefs.setLoginState(true)
+                            uiThread {
+                                view.onLoginSuccess()
+                            }
+                        }else{//登录失败
+                            uiThread { view.onLoginFailed(msg) }
+                        }
+                }else{
+                    uiThread { view.onLoginFailed(message) }
+                }
+            }
         })
     }
+    private fun getLoginCall(Account: String, password: String, service: LoginService, loginType: Int):Call<LoginBean>?{
+         return when(loginType){
+             LoginActivity.LOGIN_TYPE_USERNAME ->  service.loginWithUserName(Account,password.toMD5())
+             LoginActivity.LOGIN_TYPE_PHONE ->  service.loginWithPhone(Account,password.toMD5())
+             LoginActivity.LOGIN_TYPE_EMAIL -> service.loginWithEmail(Account,password.toMD5())
+             else -> null
+        }
 
+    }
+    private fun checkAccount(loginAccount: String, loginType: Int): Boolean {
+        return when(loginType){
+            LoginActivity.LOGIN_TYPE_USERNAME -> checkUserName(loginAccount)
+            LoginActivity.LOGIN_TYPE_PHONE -> checkPhone(loginAccount)
+            LoginActivity.LOGIN_TYPE_EMAIL -> checkEmail(loginAccount)
+            else -> false
+        }
+    }
+    private fun checkEmail(loginAccount: String): Boolean {
+        return loginAccount.matches(Regex(pattern = "[1-9a-zA-z_]\\w{0,14}@\\w+\\.(com|net|com.cn)"))
+    }
+    private fun checkPhone(loginAccount: String): Boolean {
+        return loginAccount.matches(Regex(pattern = "^[1][3,4,5,7,8][0-9]{9}$"))
+    }
+    private fun checkUserName(loginAccount: String): Boolean {
+        //过滤特殊字符，检查输入是否合法
+        val regex = "^[a-z0-9A-Z]+$"
+        return loginAccount.length>=4 && loginAccount.matches(Regex(regex))
+    }
     private fun checkPassword(password: String): Boolean {
         //检查输入是否合法
-        return password.length>=4
-    }
-
-    private fun checkLoginId(loginId: String, loginType: Int): Boolean {
-        //过滤特殊字符，检查输入是否合法
-        return loginId.length>=4
+        return password.isNotEmpty()
     }
 
 }

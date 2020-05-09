@@ -1,45 +1,27 @@
 package com.szmy.fireflies.ui.activity
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import com.szmy.fireflies.R
-import com.szmy.fireflies.constant.GlobalUtils
+import com.szmy.fireflies.constant.Utils.getNow
 import com.szmy.fireflies.contract.SearchViewContract
 import com.szmy.fireflies.presenter.SearchPresenter
 import kotlinx.android.synthetic.main.activity_search_header.*
 import kotlinx.android.synthetic.main.activity_search_user.*
 import kotlinx.android.synthetic.main.user_info_item.*
-import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import java.util.*
-import java.util.Calendar.DAY_OF_WEEK
-import java.util.Calendar.MONTH
 import kotlin.collections.HashMap
 
 class SearchUserActivity :BaseActivity(),SearchViewContract.View{
-
     var userId:Int = -1
-
-    private val DAY_OF_WEEK = arrayOf("Sun","Mon","Tue","Wed","Thu","Fri","Sat")
-    private val MONTH = arrayOf("Jan","Feb","Mar","Apr","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
-
-
-    companion object{
-        fun start(){
-            GlobalUtils.getContext().startActivity<SearchUserActivity>()
-        }
-    }
-val presenter = SearchPresenter(this)
+    val presenter = SearchPresenter(this)
     override fun getLayoutId(): Int {
         return R.layout.activity_search_user
     }
     override fun init() {
         super.init()
-
-
         follow.setOnClickListener {
             if (userId!=-1){
                 val now = getNow()
@@ -101,17 +83,4 @@ val presenter = SearchPresenter(this)
     override fun onFollowFailed() {
         toast("关注失败")
     }
-
-    private fun getNow(): String {
-        val calendar = Calendar.getInstance()
-        calendar.timeZone = TimeZone.getTimeZone("GMT")
-        return DAY_OF_WEEK[calendar.get(Calendar.DAY_OF_WEEK) - 1]+ "," + calendar.get(Calendar.DAY_OF_MONTH)
-            .toString() + " " + MONTH[calendar.get(Calendar.MONTH) - 1] + " " + calendar.get(Calendar.YEAR)
-            .toString() + " " + calendar.get(Calendar.HOUR_OF_DAY)
-            .toString() + ":" + calendar.get(Calendar.MINUTE)
-            .toString() + ":" + calendar.get(Calendar.SECOND)
-            .toString() + " GMT"
-
-    }
-
 }
