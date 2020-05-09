@@ -66,12 +66,10 @@ class MeFragment : BaseFragment(), MeFragmentContract.View {
     override fun getUserInfoFailed(message: String) {
         progress.visibility = View.GONE
         simple_info.visibility = View.VISIBLE
-        mContext.toast("加载失败")
+        mContext.toast(message)
     }
     override fun startGetInfo() {
         progress.visibility = View.VISIBLE
         simple_info.visibility = View.GONE
     }
-
-
 }
