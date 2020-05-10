@@ -20,6 +20,7 @@ interface LoginContract {
         fun onInputError()
         fun onLoginSuccess()
         fun onLoginFailed(msg:String)
+        fun onHttpRequestFailed(msg:String)
     }
 
 }

@@ -109,4 +109,8 @@ class LoginActivity : BaseActivity(), LoginContract.View {
         toast(msg)
     }
 
+    override fun onHttpRequestFailed(msg: String) {
+        toast(msg)
+    }
+
 }

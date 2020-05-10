@@ -6,7 +6,7 @@ import com.szmy.fireflies.contract.LoginContract
 import com.szmy.fireflies.extensions.toMD5
 import com.szmy.fireflies.constant.UserApi
 import com.szmy.fireflies.model.Prefs
-import com.szmy.fireflies.serverapi.LoginService
+import com.szmy.fireflies.serverapi.UserAuthService
 import com.szmy.fireflies.ui.activity.LoginActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,18 +26,13 @@ class LoginPresenter(val view: LoginContract.View) : LoginContract.Presenter {
         if (checkAccount(loginAccount,loginType)){
             if (checkPassword(password)){
                 //通知view开始登录操作了
-
-                uiThread {
-                    view.onLoginStart()
-                }
-
+                view.onLoginStart()
                 toLogin(loginAccount,password,loginType)
             }else{
                 //密码输入不合法
                 uiThread {
                     view.onInputError()
                 }
-
             }
         }else{
             //手机号输入不合法
@@ -50,14 +45,13 @@ class LoginPresenter(val view: LoginContract.View) : LoginContract.Presenter {
 
         Log.d("Login",loginAccount)
         Log.d("Login",password.toMD5())
-
         //动态代理
-        val loginService = retrofit.create(LoginService::class.java)
+        val loginService = retrofit.create(UserAuthService::class.java)
         val loginCall = getLoginCall(loginAccount,password,loginService,loginType)
         loginCall?.enqueue(object :Callback<LoginBean>{
             override fun onFailure(call: Call<LoginBean>, t: Throwable) {
                 uiThread {
-                    view.onLoginFailed("网络异常:"+t.message)
+                    view.onHttpRequestFailed("网络异常:"+t.message)
                 }
             }
             override fun onResponse(call: Call<LoginBean>, response: Response<LoginBean>) {
@@ -82,12 +76,12 @@ class LoginPresenter(val view: LoginContract.View) : LoginContract.Presenter {
                             uiThread { view.onLoginFailed(msg) }
                         }
                 }else{
-                    uiThread { view.onLoginFailed(message) }
+                    uiThread { view.onHttpRequestFailed(message) }
                 }
             }
         })
     }
-    private fun getLoginCall(Account: String, password: String, service: LoginService, loginType: Int):Call<LoginBean>?{
+    private fun getLoginCall(Account: String, password: String, service: UserAuthService, loginType: Int):Call<LoginBean>?{
          return when(loginType){
              LoginActivity.LOGIN_TYPE_USERNAME ->  service.loginWithUserName(Account,password.toMD5())
              LoginActivity.LOGIN_TYPE_PHONE ->  service.loginWithPhone(Account,password.toMD5())

@@ -6,7 +6,7 @@
     >
     <ImageView
         android:id="@+id/back"
-        android:src="@mipmap/icon_left"
+        android:src="@mipmap/cancel"
         android:padding="5dp"
         android:layout_width="45dp"
         android:layout_height="45dp"/>

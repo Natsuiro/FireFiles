@@ -141,4 +141,8 @@ class RegisterActivity : BaseActivity(), RegisterContract.View {
     override fun onAccountNotExist() {
         toRegister()
     }
+
+    override fun onHttpRequestFailed(msg: String) {
+        toast(msg)
+    }
 }

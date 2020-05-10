@@ -29,4 +29,7 @@
     <string name="choose_icon">选择头像</string>
     <string name="register_type">注册方式</string>
     <string name="header_setting">设置</string>
+    <string name="username">UserName</string>
+    <string name="fans">粉丝:</string>
+    <string name="follows">关注</string>
 </resources>

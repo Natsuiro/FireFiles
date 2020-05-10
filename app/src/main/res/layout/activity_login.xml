@@ -90,7 +90,7 @@
     </FrameLayout>
 
         <TextView
-            android:textColor="@color/im_blue"
+            android:textColor="@color/ff_color_blue"
             android:id="@+id/newUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

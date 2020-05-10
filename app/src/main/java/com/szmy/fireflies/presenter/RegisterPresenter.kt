@@ -10,7 +10,7 @@ import com.szmy.fireflies.constant.Utils
 import com.szmy.fireflies.constant.UserApi
 import com.szmy.fireflies.contract.RegisterContract
 import com.szmy.fireflies.extensions.toMD5
-import com.szmy.fireflies.serverapi.RegisterService
+import com.szmy.fireflies.serverapi.UserAuthService
 import org.jetbrains.anko.doAsync
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,8 +34,8 @@ class RegisterPresenter(private val view: RegisterContract.View) : RegisterContr
         password: String,
         confirmPassword: String,
         timestamp: String,
-        bytes: ByteArray
-    ) {
+        bytes: ByteArray) {
+
         if (checkAccount(account)) {
             if (checkPassword(password)) {
                 if (checkConfirmPassword(confirmPassword, password)) {
@@ -54,12 +54,12 @@ class RegisterPresenter(private val view: RegisterContract.View) : RegisterContr
 
     override fun checkIdExist(registerAccount: String){
         view.onRegisterStart()
-        val service = retrofit.create(RegisterService::class.java)
+        val service = retrofit.create(UserAuthService::class.java)
         val callCheck = service.checkUserIsExisted(registerAccount)
 
         callCheck.enqueue(object :Callback<UserCountBean>{
             override fun onFailure(call: Call<UserCountBean>, t: Throwable) {
-                uiThread { view.onRegisterFailed("网络异常:"+t.message) }
+                uiThread { view.onHttpRequestFailed("网络异常:"+t.message) }
             }
             override fun onResponse(call: Call<UserCountBean>, response: retrofit2.Response<UserCountBean>) {
                 val status = response.code()
@@ -83,7 +83,7 @@ class RegisterPresenter(private val view: RegisterContract.View) : RegisterContr
                         uiThread { view.onRegisterFailed(msg) }
                     }
                 }else{
-                    uiThread { view.onRegisterFailed(message) }
+                    uiThread { view.onHttpRequestFailed(message) }
                 }
             }
         })
@@ -101,19 +101,19 @@ class RegisterPresenter(private val view: RegisterContract.View) : RegisterContr
             upLoadToOss(headImg, bytes)
         }
 
-        val service = retrofit.create(RegisterService::class.java)
+        val service = retrofit.create(UserAuthService::class.java)
         val callRegister =
             service.registerWithUserName(account, password.toMD5(), timestamp, headImg)
 
         callRegister.enqueue(object :Callback<UserInfoBean>{
             override fun onFailure(call: Call<UserInfoBean>, t: Throwable) {
-                uiThread { view.onRegisterFailed("网络异常:"+t.message) }
+                uiThread { view.onHttpRequestFailed("网络异常:"+t.message) }
             }
 
             override fun onResponse(
                 call: Call<UserInfoBean>,
-                response: retrofit2.Response<UserInfoBean>
-            ) {
+                response: retrofit2.Response<UserInfoBean>) {
+
                 val status = response.code()
                 val message = response.message()
                 if (status==200){
@@ -128,7 +128,7 @@ class RegisterPresenter(private val view: RegisterContract.View) : RegisterContr
                     }
 
                 }else{
-                    uiThread { view.onRegisterFailed(message) }
+                    uiThread { view.onHttpRequestFailed(message) }
                 }
             }
 

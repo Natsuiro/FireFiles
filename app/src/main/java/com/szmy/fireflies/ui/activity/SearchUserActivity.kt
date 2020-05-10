@@ -1,10 +1,13 @@
 package com.szmy.fireflies.ui.activity
 
+import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import com.szmy.fireflies.R
+import com.szmy.fireflies.beans.UserInfo
 import com.szmy.fireflies.constant.Utils.getNow
 import com.szmy.fireflies.contract.SearchViewContract
 import com.szmy.fireflies.presenter.SearchPresenter
@@ -12,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_search_header.*
 import kotlinx.android.synthetic.main.activity_search_user.*
 import kotlinx.android.synthetic.main.user_info_item.*
 import org.jetbrains.anko.toast
-import kotlin.collections.HashMap
 
 class SearchUserActivity :BaseActivity(),SearchViewContract.View{
     var userId:Int = -1
@@ -30,15 +32,14 @@ class SearchUserActivity :BaseActivity(),SearchViewContract.View{
             }
         }
 
-        user_info_item.visibility = View.GONE
-        progress.visibility = View.GONE
         cancel.setOnClickListener {
             finish()
         }
+
         searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean {
                 Log.d("queryText",""+query)
-                presenter.search(query,"userName","fansCount","userId")
+                presenter.search(query.toInt())
                 return false
             }
 
@@ -53,23 +54,22 @@ class SearchUserActivity :BaseActivity(),SearchViewContract.View{
         user_info_item.visibility = View.GONE
     }
 
-    override fun onSearchSuccess(userInfo: HashMap<String, Any>) {
+    override fun onSearchSuccess(userInfo: UserInfo) {
         user_info_item.visibility = View.VISIBLE
         progress.visibility = View.GONE
-        val userName = userInfo["userName"]
-        val fans = userInfo["fansCount"]
-        userId = userInfo["userId"] as Int
-        if (userName != null) {
-            username.text = userName as String
-        }
-        if (fans != null) {
-            fansCount.text = fans.toString()
-        }
+        username.text = userInfo.userName
+        fansCount.text = userInfo.fansCount.toString()
+        userId = userInfo.userId
+        checkUserHasFollowed(userId)
     }
 
-    override fun onSearchFailed() {
+    private fun checkUserHasFollowed(userId: Int) {
+        presenter.checkUserHasFollowed(userId)
+    }
+
+    override fun onSearchFailed(msg: String) {
         progress.visibility = View.GONE
-        toast(getString(R.string.load_fail))
+        toast(msg)
     }
 
     override fun onFollowSuccess() {
@@ -80,7 +80,27 @@ class SearchUserActivity :BaseActivity(),SearchViewContract.View{
     }
 
 
-    override fun onFollowFailed() {
-        toast("关注失败")
+    override fun onFollowFailed(msg: String) {
+        toast(msg)
+    }
+
+    override fun onHttpRequestFailed(msg: String) {
+        toast(msg)
+    }
+
+    override fun onUserCheckFailed(msg: String) {
+        toast(msg)
+    }
+
+    override fun onUserHasFollowed() {
+        follow.setBackgroundColor(Color.LTGRAY)
+        follow.text = "已关注"
+        follow.isEnabled = false
+    }
+
+    override fun onUserHasNotFollowed() {
+        follow.setBackgroundColor(resources.getColor(R.color.ff_color_blue))
+        follow.text = "关注"
+        follow.isEnabled = true
     }
 }

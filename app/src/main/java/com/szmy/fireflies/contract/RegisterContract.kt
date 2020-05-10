@@ -23,6 +23,7 @@ interface RegisterContract {
         fun onRegisterFailed(msg:String)
         fun onAccountExist()
         fun onAccountNotExist()
+        fun onHttpRequestFailed(msg:String)
     }
 
 }

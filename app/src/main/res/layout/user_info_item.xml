@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/user_info_item"
+    android:visibility="gone"
     android:layout_width="match_parent"
     android:padding="5dp"
     android:layout_height="75dp">
@@ -13,7 +14,7 @@
 
     <TextView
         android:id="@+id/username"
-        android:text="UserName"
+        android:text="@string/username"
         android:textColor="@android:color/black"
         android:textSize="20sp"
         android:layout_toEndOf="@+id/user_icon"
@@ -30,7 +31,7 @@
         android:id="@+id/fans"
         android:layout_below="@+id/brief"
         android:layout_toEndOf="@+id/user_icon"
-        android:text="粉丝:"
+        android:text="@string/fans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <TextView
@@ -42,7 +43,7 @@
         android:layout_height="wrap_content"/>
 
     <Button
-        android:text="关注"
+        android:text="@string/follows"
         android:id="@+id/follow"
         android:textColor="@android:color/white"
         android:background="@android:color/holo_blue_light"
