@@ -10,6 +10,7 @@ import com.szmy.fireflies.model.Prefs
 import com.szmy.fireflies.presenter.MeFragmentPresenter
 import com.szmy.fireflies.ui.activity.LoginActivity
 import com.szmy.fireflies.ui.activity.SearchUserActivity
+import com.szmy.fireflies.ui.activity.SettingActivity
 import kotlinx.android.synthetic.main.fragment_me.*
 import kotlinx.android.synthetic.main.fragment_me_header.*
 import kotlinx.android.synthetic.main.user_simple_info.*
@@ -19,7 +20,6 @@ import org.jetbrains.anko.toast
 class MeFragment : BaseFragment(), MeFragmentContract.View {
 
     private val mContext = Utils.getContext()
-
     override fun getLayoutId(): Int {
         return R.layout.fragment_me
     }
@@ -29,13 +29,7 @@ class MeFragment : BaseFragment(), MeFragmentContract.View {
     override fun init() {
         super.init()
         setting.setOnClickListener {
-            drawer.openDrawer(GravityCompat.END)
-        }
-
-        btn_logout.setOnClickListener {
-            activity?.finish()
-            Prefs.setLoginState(false)
-            mContext.startActivity<LoginActivity>()
+            mContext.startActivity<SettingActivity>()
         }
 
         search_user.setOnClickListener {

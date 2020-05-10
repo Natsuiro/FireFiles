@@ -22,6 +22,7 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
         init()
+        ActivityCollector.addActivity(this)
     }
 
     /**
@@ -36,6 +37,11 @@ abstract class BaseActivity : AppCompatActivity() {
 
     fun hideSoftKeyBoard(){
         inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken,0)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ActivityCollector.removeActivity(this)
     }
 
 }
