@@ -21,8 +21,6 @@ import java.util.concurrent.Executors
 
 class RegisterPresenter(private val view: RegisterContract.View) : RegisterContract.Presenter {
 
-    val mContext = Utils.getContext()
-
     private val retrofit = Retrofit.Builder()
         .baseUrl(UserApi.BaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
@@ -94,8 +92,7 @@ class RegisterPresenter(private val view: RegisterContract.View) : RegisterContr
         account: String,
         password: String,
         timestamp: String,
-        bytes: ByteArray
-    ) {
+        bytes: ByteArray) {
         val headImg = bytes.toMD5()
         doAsync {
             upLoadToOss(headImg, bytes)

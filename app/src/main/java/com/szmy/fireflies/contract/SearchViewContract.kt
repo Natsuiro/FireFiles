@@ -1,6 +1,6 @@
 package com.szmy.fireflies.contract
 
-import com.szmy.fireflies.beans.UserInfo
+import com.szmy.fireflies.beans.FullUserInfo
 import com.szmy.fireflies.presenter.BasePresenter
 
 interface SearchViewContract {
@@ -11,7 +11,7 @@ interface SearchViewContract {
     }
     interface View{
         fun startSearch()
-        fun onSearchSuccess(userInfo: UserInfo)
+        fun onSearchSuccess(userInfo: FullUserInfo)
         fun onSearchFailed(msg: String)
         fun onFollowSuccess()
         fun onFollowFailed(msg: String)

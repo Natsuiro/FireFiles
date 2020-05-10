@@ -1,13 +1,11 @@
 package com.szmy.fireflies.ui.activity
 
-import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import com.szmy.fireflies.R
-import com.szmy.fireflies.beans.UserInfo
+import com.szmy.fireflies.beans.FullUserInfo
 import com.szmy.fireflies.constant.Utils.getNow
 import com.szmy.fireflies.contract.SearchViewContract
 import com.szmy.fireflies.presenter.SearchPresenter
@@ -54,7 +52,7 @@ class SearchUserActivity :BaseActivity(),SearchViewContract.View{
         user_info_item.visibility = View.GONE
     }
 
-    override fun onSearchSuccess(userInfo: UserInfo) {
+    override fun onSearchSuccess(userInfo: FullUserInfo) {
         user_info_item.visibility = View.VISIBLE
         progress.visibility = View.GONE
         username.text = userInfo.userName

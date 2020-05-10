@@ -49,6 +49,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/llMsg"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -72,7 +73,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+
+            android:id="@+id/llFollow"
+          android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/simple_info_ll"
@@ -95,6 +98,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llFans"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

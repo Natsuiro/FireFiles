@@ -6,11 +6,6 @@ data class UserFollowedListBean(
     val userList:ArrayList<SimpleUserInfo>
 ){
 
-    data class SimpleUserInfo(
-        val userId:Int,
-        val userName:String,
-        val userSex:Int,
-        val userHeadImg:String
-    )
+
 
 }

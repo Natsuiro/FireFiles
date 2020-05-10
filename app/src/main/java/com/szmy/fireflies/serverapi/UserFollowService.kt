@@ -18,4 +18,7 @@ interface UserFollowService {
     @GET("Follow/follow")
     fun getFollowedList(@Header("token") token: String):Call<UserFollowedListBean>
 
+    @POST("Follow/unFollow")
+    fun unFollow(@Query("followedId") followedId: Int,@Header("token") token: String):Call<ResponseBody>
+
 }

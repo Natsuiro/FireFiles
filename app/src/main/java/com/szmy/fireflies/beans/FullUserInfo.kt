@@ -3,7 +3,7 @@ package com.szmy.fireflies.beans
 import android.os.Parcel
 import android.os.Parcelable
 
-data class UserInfo(
+data class FullUserInfo(
     val userId:Int,
     val userPhone:String,
     val userEmail:String,

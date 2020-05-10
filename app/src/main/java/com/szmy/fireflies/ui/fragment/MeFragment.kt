@@ -1,14 +1,13 @@
 package com.szmy.fireflies.ui.fragment
 
 import android.view.View
-import androidx.core.view.GravityCompat
 import com.szmy.fireflies.R
-import com.szmy.fireflies.beans.UserInfo
+import com.szmy.fireflies.beans.FullUserInfo
 import com.szmy.fireflies.constant.Utils
 import com.szmy.fireflies.contract.MeFragmentContract
 import com.szmy.fireflies.model.Prefs
 import com.szmy.fireflies.presenter.MeFragmentPresenter
-import com.szmy.fireflies.ui.activity.LoginActivity
+import com.szmy.fireflies.ui.activity.FollowedListActivity
 import com.szmy.fireflies.ui.activity.SearchUserActivity
 import com.szmy.fireflies.ui.activity.SettingActivity
 import kotlinx.android.synthetic.main.fragment_me.*
@@ -28,6 +27,11 @@ class MeFragment : BaseFragment(), MeFragmentContract.View {
 
     override fun init() {
         super.init()
+
+        llFollow.setOnClickListener {
+            mContext.startActivity<FollowedListActivity>()
+        }
+
         setting.setOnClickListener {
             mContext.startActivity<SettingActivity>()
         }
@@ -47,7 +51,7 @@ class MeFragment : BaseFragment(), MeFragmentContract.View {
         presenter.getUserInfo(userId)
     }
 
-    override fun getUserInfoSuccess(userInfo: UserInfo) {
+    override fun getUserInfoSuccess(userInfo: FullUserInfo) {
         progress.visibility = View.GONE
         simple_info.visibility = View.VISIBLE
         userId.text = userInfo.userName

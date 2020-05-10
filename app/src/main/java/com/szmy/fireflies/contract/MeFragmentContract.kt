@@ -1,6 +1,6 @@
 package com.szmy.fireflies.contract
 
-import com.szmy.fireflies.beans.UserInfo
+import com.szmy.fireflies.beans.FullUserInfo
 import com.szmy.fireflies.presenter.BasePresenter
 
 interface MeFragmentContract {
@@ -13,7 +13,7 @@ interface MeFragmentContract {
     }
 
     interface View{
-        fun getUserInfoSuccess(userInfo: UserInfo)
+        fun getUserInfoSuccess(userInfo: FullUserInfo)
         fun getUserInfoFailed(message: String)
         fun startGetInfo()
     }
