@@ -1,6 +1,7 @@
 package com.szmy.fireflies.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ abstract class BaseFragment : Fragment() {
     abstract fun getLayoutId(): Int
 
     open fun init() {
-
+        Log.d("fragment",this.toString())
     }
 
 

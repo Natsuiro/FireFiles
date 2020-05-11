@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:background="@color/ff_color_blue"
+    android:orientation="horizontal"
     >
     <ImageView
         android:layout_gravity="center_vertical"
@@ -15,9 +16,21 @@
     <TextView
         android:textColor="@android:color/white"
         android:textSize="22sp"
-        android:text="@string/follows"
+        android:text="@string/edit"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/push"
+        android:text="@string/push"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:layout_gravity="end"
+        android:background="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
 
 </FrameLayout>

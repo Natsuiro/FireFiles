@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="60dp"
+    android:background="@color/ff_color_blue"
     android:orientation="horizontal"
     >
     <ImageView
+        android:layout_gravity="center_vertical"
         android:id="@+id/back"
-        android:src="@mipmap/cancel"
+        android:src="@mipmap/icon_left"
         android:padding="5dp"
         android:layout_width="45dp"
         android:layout_height="45dp"/>
     <TextView
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="22sp"
         android:text="@string/header_setting"
         android:gravity="center"

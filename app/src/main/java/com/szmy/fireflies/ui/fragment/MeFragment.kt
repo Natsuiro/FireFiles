@@ -7,6 +7,7 @@ import com.szmy.fireflies.constant.Utils
 import com.szmy.fireflies.contract.MeFragmentContract
 import com.szmy.fireflies.model.Prefs
 import com.szmy.fireflies.presenter.MeFragmentPresenter
+import com.szmy.fireflies.ui.activity.FansListActivity
 import com.szmy.fireflies.ui.activity.FollowedListActivity
 import com.szmy.fireflies.ui.activity.SearchUserActivity
 import com.szmy.fireflies.ui.activity.SettingActivity
@@ -29,15 +30,19 @@ class MeFragment : BaseFragment(), MeFragmentContract.View {
         super.init()
 
         llFollow.setOnClickListener {
-            mContext.startActivity<FollowedListActivity>()
+            activity?.startActivity<FollowedListActivity>()
+        }
+
+        llFans.setOnClickListener {
+            activity?.startActivity<FansListActivity>()
         }
 
         setting.setOnClickListener {
-            mContext.startActivity<SettingActivity>()
+            activity?.startActivity<SettingActivity>()
         }
 
         search_user.setOnClickListener {
-            mContext.startActivity<SearchUserActivity>()
+            activity?.startActivity<SearchUserActivity>()
         }
     }
 

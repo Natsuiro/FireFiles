@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:text="Home"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="60dp"
+        android:background="@color/ff_color_blue"
+        app:title="首页"
+        app:titleTextColor="@android:color/white" />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_below="@+id/toolbar"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/msgList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <ProgressBar
+            android:id="@+id/loading"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:src="@mipmap/icon_setting"
+        app:fab_addButtonColorNormal="@color/ff_color_blue"
+        >
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit"
+            app:fab_icon="@mipmap/edit"
+            app:fab_colorNormal="@color/ff_color_blue"
+            app:fab_title="编辑"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+</RelativeLayout>

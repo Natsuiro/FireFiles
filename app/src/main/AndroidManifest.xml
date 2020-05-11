@@ -3,32 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.szmy.fireflies">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
+
     <application
-        android:usesCleartextTraffic="true"
         android:name=".app.FFApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <!-- 目前应用打开必须先登录再使用
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".ui.activity.PushMsgActivity"></activity>
+        <!--
+         目前应用打开必须先登录再使用
             其次每次打开应用需要判断是否已经登录
             由于服务器没有这个服务，所以先在本地缓存登录状态
         -->
-        <activity android:name=".ui.activity.SearchUserActivity"/>
-        <activity android:name=".ui.activity.LoginActivity"/>
-
-        <activity android:name=".ui.activity.MainActivity"/>
-
-        <activity android:name=".ui.activity.RegisterActivity"/>
-
+        <activity android:name=".ui.activity.FansListActivity" />
+        <activity android:name=".ui.activity.SearchUserActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,10 +38,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activity.SettingActivity"/>
-        <activity android:name=".ui.activity.FollowedListActivity"/>
-
+        <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.FollowedListActivity" />
     </application>
 
 </manifest>

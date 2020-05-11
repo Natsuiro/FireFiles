@@ -25,12 +25,12 @@ class SearchPresenter(val view:SearchViewContract.View) :SearchViewContract.Pres
         .callbackExecutor(Executors.newSingleThreadExecutor())
         .build()
 
-    override fun search(userId: Int) {
+    override fun search(accountId: Int) {
 
         view.startSearch()
 
         val service = retrofit.create(UserInfoService::class.java)
-        val callSearch = service.getUserFullInfo(userId, "" + Prefs.getUserToken())
+        val callSearch = service.getUserFullInfo(accountId, "" + Prefs.getUserToken())
         callSearch.enqueue(object : Callback<UserInfoBean>{
             override fun onFailure(call: Call<UserInfoBean>, t: Throwable) {
                 uiThread { view.onHttpRequestFailed("网络异常:"+t.message) }
@@ -59,9 +59,12 @@ class SearchPresenter(val view:SearchViewContract.View) :SearchViewContract.Pres
         })
     }
 
-    override fun follow(userId: Int,time:String) {
+    override fun follow(accountId: Int, time:String) {
+
+        view.onStartFollow()
+
         val service = retrofit.create(UserFollowService::class.java)
-        val callFollow = service.follow(userId, time, "" + Prefs.getUserToken())
+        val callFollow = service.follow(accountId, time, "" + Prefs.getUserToken())
         callFollow.enqueue(object :Callback<ResponseBody>{
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 uiThread { view.onFollowFailed("网络异常:"+t.message) }
@@ -69,7 +72,6 @@ class SearchPresenter(val view:SearchViewContract.View) :SearchViewContract.Pres
             override fun onResponse(
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>) {
-
                 val status = response.code()
                 val message = response.message()
                 val url = call.request().url()
@@ -92,7 +94,7 @@ class SearchPresenter(val view:SearchViewContract.View) :SearchViewContract.Pres
         })
     }
 
-    override fun checkUserHasFollowed(userId: Int) {
+    override fun checkUserHasFollowed(accountId: Int) {
         val service = retrofit.create(UserFollowService::class.java)
         val callList = service.getFollowedList("" + Prefs.getUserToken())
         callList.enqueue(object :Callback<UserFollowedListBean>{
@@ -112,7 +114,7 @@ class SearchPresenter(val view:SearchViewContract.View) :SearchViewContract.Pres
                         var hasFollowed = false
                         val userList = listBean.userList
                         for (user in userList){
-                            if (user.userId == userId){
+                            if (user.userId == accountId){
                                 hasFollowed = true
                             }
                         }

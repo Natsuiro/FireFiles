@@ -5,9 +5,9 @@ import com.szmy.fireflies.presenter.BasePresenter
 
 interface SearchViewContract {
     interface Presenter:BasePresenter{
-        fun search(userId:Int)
-        fun follow(userId:Int,time:String)
-        fun checkUserHasFollowed(userId: Int)
+        fun search(accountId:Int)
+        fun follow(accountId:Int,time:String)
+        fun checkUserHasFollowed(accountId: Int)
     }
     interface View{
         fun startSearch()
@@ -19,5 +19,6 @@ interface SearchViewContract {
         fun onUserCheckFailed(msg: String)
         fun onUserHasFollowed()
         fun onUserHasNotFollowed()
+        fun onStartFollow()
     }
 }

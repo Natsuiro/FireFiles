@@ -8,11 +8,12 @@
     <include layout="@layout/activity_search_header"/>
 
     <androidx.appcompat.widget.SearchView
+        app:queryHint="输入id查询"
+        android:inputType="number"
         android:id="@+id/searchView"
-        app:iconifiedByDefault="false"
-        app:queryHint="输入id进行搜索"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+        android:layout_height="50dp"/>
 
     <ProgressBar
         android:visibility="gone"
@@ -21,6 +22,8 @@
         android:layout_height="wrap_content"/>
 
     <include layout="@layout/user_info_item"/>
+
+
 
 
 </LinearLayout>

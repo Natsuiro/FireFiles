@@ -30,6 +30,9 @@
     <string name="register_type">注册方式</string>
     <string name="header_setting">设置</string>
     <string name="username">UserName</string>
-    <string name="fans">粉丝:</string>
+    <string name="fans">粉丝</string>
     <string name="follows">关注</string>
+    <string name="edit">编辑微博</string>
+    <string name="push">发布</string>
+    <string name="share_news">分享新鲜事...</string>
 </resources>

@@ -4,10 +4,10 @@
     android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <include layout="@layout/follow_list_header"/>
+    <include layout="@layout/fans_list_header"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/followList"
+        android:id="@+id/fansList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <ProgressBar

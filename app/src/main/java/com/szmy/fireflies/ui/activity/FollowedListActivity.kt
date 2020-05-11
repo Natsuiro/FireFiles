@@ -22,7 +22,6 @@ class FollowedListActivity :BaseActivity(),FollowedListContract.View{
         super.init()
         initRecyclerView()
         getFollowedList()
-
         cancel.setOnClickListener { finish() }
     }
 

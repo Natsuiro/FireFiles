@@ -14,37 +14,49 @@ import kotlinx.android.synthetic.main.activity_search_user.*
 import kotlinx.android.synthetic.main.user_info_item.*
 import org.jetbrains.anko.toast
 
+
 class SearchUserActivity :BaseActivity(),SearchViewContract.View{
-    var userId:Int = -1
+    var accountId:Int = -1
     val presenter = SearchPresenter(this)
     override fun getLayoutId(): Int {
         return R.layout.activity_search_user
     }
+
     override fun init() {
         super.init()
-        follow.setOnClickListener {
-            if (userId!=-1){
-                val now = getNow()
-                Log.d("now",now)
-                presenter.follow(userId,now)
-            }
-        }
+
+        user_info_item.visibility = View.GONE
+
+        initFollow()
 
         cancel.setOnClickListener {
             finish()
         }
 
-        searchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d("queryText",""+query)
-                presenter.search(query.toInt())
-                return false
+        searchView.setOnQueryTextListener(object:SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query!=null){
+                    presenter.search(query.toInt())
+                }
+                return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                return false
+                return true
             }
+
         })
+
+    }
+
+    private fun initFollow() {
+        follow.setOnClickListener {
+            if (accountId != -1) {
+                val now = getNow()
+                Log.d("now", now)
+                presenter.follow(accountId, now)
+            }
+        }
     }
 
     override fun startSearch() {
@@ -57,8 +69,8 @@ class SearchUserActivity :BaseActivity(),SearchViewContract.View{
         progress.visibility = View.GONE
         username.text = userInfo.userName
         fansCount.text = userInfo.fansCount.toString()
-        userId = userInfo.userId
-        checkUserHasFollowed(userId)
+        accountId = userInfo.userId
+        checkUserHasFollowed(accountId)
     }
 
     private fun checkUserHasFollowed(userId: Int) {
@@ -71,6 +83,8 @@ class SearchUserActivity :BaseActivity(),SearchViewContract.View{
     }
 
     override fun onFollowSuccess() {
+        following.visibility = View.GONE
+        follow.visibility = View.VISIBLE
         follow.setBackgroundColor(Color.LTGRAY)
         follow.text = "已关注"
         follow.isEnabled = false
@@ -79,6 +93,8 @@ class SearchUserActivity :BaseActivity(),SearchViewContract.View{
 
 
     override fun onFollowFailed(msg: String) {
+        following.visibility = View.GONE
+        follow.visibility = View.VISIBLE
         toast(msg)
     }
 
@@ -101,4 +117,11 @@ class SearchUserActivity :BaseActivity(),SearchViewContract.View{
         follow.text = "关注"
         follow.isEnabled = true
     }
+
+    override fun onStartFollow() {
+        following.visibility = View.VISIBLE
+        follow.visibility = View.GONE
+    }
+
+
 }
