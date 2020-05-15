@@ -9,7 +9,7 @@ interface HomeFragmentContract {
     interface Presenter:BasePresenter{
         fun pushMsg(content:String,time:String)
         fun getFollowedList()
-        fun getMsgs(userId:Int,currPage:Int,isLastUser:Boolean)
+        fun getUserMsgList(cur: Int, userId:Int, currPage:Int)
     }
 
     interface View{
@@ -20,7 +20,7 @@ interface HomeFragmentContract {
         fun onGetListSuccess(userList: ArrayList<SimpleUserInfo>)
         fun onGetListFailed(msg: String)
         fun onGetMsgsFailed(message: String)
-        fun onGetMsgsSuccess(bean: UserMsgListBean, lastUser: Boolean)
+        fun onGetMsgsSuccess(bean: UserMsgListBean, cur: Int)
         fun onStartGetMsgs()
     }
 

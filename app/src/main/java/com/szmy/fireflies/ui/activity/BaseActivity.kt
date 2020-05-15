@@ -1,6 +1,7 @@
 package com.szmy.fireflies.ui.activity
 
 import android.app.ProgressDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +21,8 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContentView(getLayoutId())
         init()
         ActivityCollector.addActivity(this)

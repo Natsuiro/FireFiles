@@ -20,7 +20,8 @@ import java.util.concurrent.Executors
 
 class HomeFragmentPresenter(val view: HomeFragmentContract.View) : HomeFragmentContract.Presenter {
 
-
+    var alreadyLoad = 0
+    var userListSize = 0
     override fun pushMsg(content: String, time: String) {
         val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -79,6 +80,7 @@ class HomeFragmentPresenter(val view: HomeFragmentContract.View) : HomeFragmentC
                     val code = listBean.code
                     val msg = listBean.msg
                     if (code == 0) {
+                        userListSize = listBean.userList.size
                         uiThread { view.onGetListSuccess(listBean.userList) }
                     } else {
                         uiThread { view.onGetListFailed(msg) }
@@ -93,7 +95,7 @@ class HomeFragmentPresenter(val view: HomeFragmentContract.View) : HomeFragmentC
         })
     }
 
-    override fun getMsgs(userId: Int, currPage: Int, isLastUser: Boolean) {
+    override fun getUserMsgList(cur:Int, userId: Int, currPage: Int) {
         view.onStartGetMsgs()
         val retrofit = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -102,6 +104,7 @@ class HomeFragmentPresenter(val view: HomeFragmentContract.View) : HomeFragmentC
             .build()
         val service = retrofit.create(MsgControllerService::class.java)
         val userMsgList = service.getUserMsgList(userId, currPage, "" + Prefs.getUserToken())
+
         userMsgList.enqueue(object : Callback<UserMsgListBean> {
             override fun onFailure(call: Call<UserMsgListBean>, t: Throwable) {
                 uiThread { view.onHttpRequestFailed("网络异常:" + t.message) }
@@ -120,7 +123,7 @@ class HomeFragmentPresenter(val view: HomeFragmentContract.View) : HomeFragmentC
                     val code = bean.code
                     val msg = bean.msg
                     if (code == 0) {
-                        uiThread { view.onGetMsgsSuccess(bean, isLastUser) }
+                        uiThread { view.onGetMsgsSuccess(bean, cur) }
                     } else {
                         uiThread { view.onGetMsgsFailed(msg) }
                     }
@@ -131,6 +134,11 @@ class HomeFragmentPresenter(val view: HomeFragmentContract.View) : HomeFragmentC
             }
 
         })
+
+
+        if (++alreadyLoad == userListSize){
+
+        }
 
     }
 
